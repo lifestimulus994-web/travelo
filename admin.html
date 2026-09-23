@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ადმინ პანელი — Travelo</title>
+<link rel="icon" href="images/logo.png" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="css/fonts.css" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <img src="images/logo-transparent.png" alt="Travelo" style="filter:invert(1) brightness(0.2);" />
+    <h1>ადმინ პანელი</h1>
+    <form id="loginForm">
+      <div class="field">
+        <label>ელფოსტა</label>
+        <input type="email" id="loginEmail" required autocomplete="username" />
+      </div>
+      <div class="field">
+        <label>პაროლი</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-primary" id="loginBtn" style="width:100%;">შესვლა</button>
+      <p class="error-text" id="loginError"></p>
+    </form>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="admin-shell hidden" id="dashboard">
+  <aside class="sidebar">
+    <img src="images/logo-transparent.png" alt="Travelo" />
+    <button class="tab-btn active" data-tab="content">შინაარსი</button>
+    <button class="tab-btn" data-tab="routes">მარშრუტები</button>
+    <button class="logout-btn" id="logoutBtn">გასვლა</button>
+  </aside>
+
+  <main class="main-panel">
+
+    <!-- CONTENT TAB -->
+    <section id="tabContent">
+      <h2>საიტის შინაარსი</h2>
+      <p class="sub">Hero, ჩვენ შესახებ, კონტაქტი და footer — ცვლილება მაშინვე აისახება საიტზე.</p>
+
+      <div class="panel-card">
+        <h3>Hero სექცია</h3>
+        <div class="field"><label>სათაური — პირველი ხაზი</label><input data-key="hero_title_line1" /></div>
+        <div class="field"><label>სათაური — ოქროსფერი სიტყვა</label><input data-key="hero_title_gold" /></div>
+        <div class="field"><label>სათაური — მეორე ხაზი</label><input data-key="hero_title_line2" /></div>
+        <div class="field"><label>ქვესათაური</label><textarea data-key="hero_subtitle"></textarea></div>
+        <div class="field">
+          <label>ფონის ფოტო</label>
+          <div class="image-field">
+            <img data-preview="hero_bg" src="" alt="" />
+            <div>
+              <input type="file" accept="image/*" data-upload="hero_bg" />
+              <input type="hidden" data-key="hero_bg" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <h3>ჩვენ შესახებ</h3>
+        <div class="field"><label>სათაური</label><input data-key="about_title" /></div>
+        <div class="field"><label>ტექსტი</label><textarea data-key="about_text"></textarea></div>
+        <div class="field">
+          <label>ფოტო</label>
+          <div class="image-field">
+            <img data-preview="about_image" src="" alt="" />
+            <div>
+              <input type="file" accept="image/*" data-upload="about_image" />
+              <input type="hidden" data-key="about_image" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <h3>კონტაქტი</h3>
+        <div class="row">
+          <div class="field"><label>ტელეფონი (tel: ლინკისთვის, +995...)</label><input data-key="phone_number" /></div>
+          <div class="field"><label>ტელეფონის ჩვენება (595 17 17 27)</label><input data-key="phone_display" /></div>
+        </div>
+        <div class="field"><label>WhatsApp ნომერი (მხოლოდ ციფრები, 995...)</label><input data-key="whatsapp_number" /></div>
+        <div class="field"><label>მისამართი</label><input data-key="contact_address" /></div>
+        <div class="field"><label>ელფოსტა</label><input data-key="contact_email" /></div>
+      </div>
+
+      <div class="panel-card">
+        <h3>Footer</h3>
+        <div class="field"><label>ტექსტი</label><textarea data-key="footer_text"></textarea></div>
+      </div>
+
+      <div class="save-bar">
+        <button class="btn btn-primary" id="saveContentBtn">შენახვა</button>
+        <span class="save-status" id="contentSaveStatus"></span>
+      </div>
+    </section>
+
+    <!-- ROUTES TAB -->
+    <section id="tabRoutes" class="hidden">
+      <h2>მარშრუტები</h2>
+      <p class="sub">დაამატეთ, ჩაასწორეთ ან წაშალეთ ტურისტული მარშრუტი.</p>
+      <button class="btn btn-primary" id="addRouteBtn" style="margin-bottom:18px;">+ მარშრუტის დამატება</button>
+
+      <div class="panel-card routes-table-wrap">
+        <table class="routes-table">
+          <thead>
+            <tr><th>ფოტო</th><th>სახელი</th><th>ფასი</th><th>რიგი</th><th></th></tr>
+          </thead>
+          <tbody id="routesTableBody"></tbody>
+        </table>
+        <p id="routesEmpty" class="sub hidden">მარშრუტი ჯერ არაა დამატებული.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ROUTE MODAL -->
+<div class="modal-scrim hidden" id="routeModalScrim">
+  <div class="modal">
+    <h3 id="routeModalTitle">მარშრუტის დამატება</h3>
+    <form id="routeForm">
+      <input type="hidden" id="routeId" />
+      <div class="field"><label>სახელი</label><input id="routeTitleInput" required /></div>
+      <div class="field"><label>Slug (URL, ავტომატურად)</label><input id="routeSlugInput" required /></div>
+      <div class="row">
+        <div class="field"><label>ბეჯი (მაგ: ზღვა • ისტორია)</label><input id="routeBadgeInput" /></div>
+        <div class="field"><label>ფასი (მაგ: $350-დან)</label><input id="routePriceInput" /></div>
+      </div>
+      <div class="field"><label>აღწერა</label><textarea id="routeDescInput" style="min-height:120px;"></textarea></div>
+      <div class="field"><label>რიგითობა (მცირე რიცხვი უფრო წინ ჩანს)</label><input id="routePositionInput" type="number" value="0" /></div>
+
+      <div class="field">
+        <label>მთავარი ფოტო (ბარათზე)</label>
+        <div class="image-field">
+          <img id="routeCoverPreview" src="" alt="" />
+          <input type="file" accept="image/*" id="routeCoverUpload" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>გალერეის ფოტოები (მარშრუტის გვერდზე)</label>
+        <input type="file" accept="image/*" id="routePhotosUpload" multiple />
+        <div class="photo-grid" id="routePhotosGrid"></div>
+      </div>
+
+      <p class="error-text" id="routeFormError"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="routeCancelBtn">გაუქმება</button>
+        <button type="submit" class="btn btn-primary" id="routeSaveBtn">შენახვა</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
