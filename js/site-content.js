@@ -26,7 +26,7 @@
   if (empty) empty.style.display = 'none';
 
   grid.innerHTML = routes.map((r) => `
-    <div class="dest-card reveal">
+    <div class="dest-card">
       <img src="${escapeHtml(r.cover_image || 'images/hero-bg.jpg')}" alt="${escapeHtml(r.title)}" loading="lazy" />
       <div class="dest-card-overlay"></div>
       ${r.badge ? `<span class="dest-badge">${escapeHtml(r.badge)}</span>` : ''}
